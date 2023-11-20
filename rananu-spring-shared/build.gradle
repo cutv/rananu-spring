@@ -1,8 +1,5 @@
-bootJar {
-    enabled = false
+plugins {
 }
-group 'vn.rananu'
-jar.archiveClassifier.convention('')
 
 repositories {
     mavenCentral()
