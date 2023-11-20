@@ -1,0 +1,14 @@
+plugins {
+    id 'java-library'
+}
+group 'vn.rananu'
+jar.archiveClassifier.convention('')
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api project(':rananu-spring-shared')
+    compileOnly 'org.springframework.boot:spring-boot-starter-security'
+}

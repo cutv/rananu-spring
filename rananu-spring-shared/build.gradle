@@ -1,0 +1,12 @@
+bootJar {
+    enabled = false
+}
+group 'vn.rananu'
+jar.archiveClassifier.convention('')
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
