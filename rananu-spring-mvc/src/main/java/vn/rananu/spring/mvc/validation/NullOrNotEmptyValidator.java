@@ -6,9 +6,9 @@ import vn.rananu.spring.mvc.validation.constraints.NullOrNotEmpty;
 
 import java.util.List;
 
-public class NullOrNotEmptyValidator implements ConstraintValidator<NullOrNotEmpty, List<Object>> {
+public class NullOrNotEmptyValidator implements ConstraintValidator<NullOrNotEmpty, List<?>> {
     @Override
-    public boolean isValid(List<Object> value, ConstraintValidatorContext context) {
-        return !value.isEmpty();
+    public boolean isValid(List<?> value, ConstraintValidatorContext context) {
+        return value != null && !value.isEmpty();
     }
 }
