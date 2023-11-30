@@ -18,10 +18,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-public abstract class GlobalDefaultExceptionHandler extends ResponseEntityExceptionHandler {
+public abstract class AbstractRestfulExceptionHandler extends ResponseEntityExceptionHandler {
     protected final MessageSource messageSource;
 
-    protected GlobalDefaultExceptionHandler(MessageSource messageSource) {
+    protected AbstractRestfulExceptionHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
         setMessageSource(messageSource);
     }
