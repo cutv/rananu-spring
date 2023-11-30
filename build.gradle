@@ -11,7 +11,7 @@ subprojects { proj ->
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
     group 'vn.rananu'
-    version = '6.0.0'
+    version = '6.0.1'
     jar.archiveClassifier.convention('')
     bootJar {
         enabled = false
@@ -45,7 +45,7 @@ subprojects { proj ->
                 url = "https://maven.pkg.github.com/cutv/rananu-spring"
                 credentials {
                     username = "cutv"
-                    password = RANANU_SPRING_TOKEN
+                    password = GITHUB_TOKEN
                 }
             }
         }
