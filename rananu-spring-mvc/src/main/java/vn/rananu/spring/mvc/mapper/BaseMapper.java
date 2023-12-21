@@ -15,7 +15,7 @@ import static vn.rananu.spring.mvc.configuration.MapperConfiguration.MODEL_MAPPE
 import static vn.rananu.spring.mvc.configuration.MapperConfiguration.MODEL_MAPPER_SKIP_NULL_ENABLED;
 
 
-public abstract class BaseMapper<DTOResult, Entity, BaseDTO> implements InitializingBean {
+public abstract class BaseMapper<DTOResult, Entity> implements InitializingBean {
 
 
     @Autowired
@@ -49,19 +49,30 @@ public abstract class BaseMapper<DTOResult, Entity, BaseDTO> implements Initiali
         return entities.stream().map(this::toDTO).collect(Collectors.toSet());
     }
 
-    public Entity toEntity(BaseDTO creationParam) {
-        return modelMapper.map(creationParam, entityType);
+    public <DTOResult> DTOResult toDTO(Object source, Class<DTOResult> clazz) {
+        return modelMapper.map(source, clazz);
     }
 
-
-    public void transferFields(BaseDTO updateParam, Entity entity) {
-        transferFields(updateParam, entity, false);
+    public <DTOResult> List<DTOResult> toDTOList(Collection<Entity> entities, Class<DTOResult> clazz) {
+        return entities.stream().map(entity -> toDTO(entity, clazz)).collect(Collectors.toList());
     }
 
-    public <T> void transferFields(T updateParam, Entity entity, boolean skipNullEnabled) {
+    public <DTOResult> Set<DTOResult> toDTOSet(Collection<Entity> entities, Class<DTOResult> clazz) {
+        return entities.stream().map(entity -> toDTO(entity, clazz)).collect(Collectors.toSet());
+    }
+
+    public Entity toEntity(Object param) {
+        return modelMapper.map(param, entityType);
+    }
+
+    public void transferFields(Object source, Object destination) {
+        transferFields(source, destination, false);
+    }
+
+    public void transferFields(Object source, Object destination, boolean skipNullEnabled) {
         if (skipNullEnabled)
-            modelMapper.map(updateParam, entity);
+            modelMapper.map(source, destination);
         else
-            modelMapperSkipNullDisabled.map(updateParam, entity);
+            modelMapperSkipNullDisabled.map(source, destination);
     }
 }
