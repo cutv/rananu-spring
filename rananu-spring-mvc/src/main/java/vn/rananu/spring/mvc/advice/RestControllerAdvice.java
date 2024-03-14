@@ -9,8 +9,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-import vn.rananu.spring.shared.Result;
-import vn.rananu.spring.mvc.annotation.RananuBody;
+import vn.rananu.spring.mvc.annotation.Result;
 
 import java.util.Locale;
 
@@ -21,15 +20,15 @@ public class RestControllerAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        RananuBody annotation = returnType.getMethodAnnotation(RananuBody.class);
+        Result annotation = returnType.getMethodAnnotation(Result.class);
         return annotation != null;
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        RananuBody annotation = returnType.getMethodAnnotation(RananuBody.class);
+        Result annotation = returnType.getMethodAnnotation(Result.class);
         if (annotation != null) {
-            Result.SuccessBuilder builder = Result.success();
+            vn.rananu.spring.shared.Result.SuccessBuilder builder = vn.rananu.spring.shared.Result.success();
             String message = annotation.message();
             if (message != null && !message.isEmpty()) {
                 //            List<Locale.LanguageRange> languageRanges = request.getHeaders().getAcceptLanguage();
