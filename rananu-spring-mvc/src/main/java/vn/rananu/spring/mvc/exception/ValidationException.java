@@ -22,4 +22,8 @@ public class ValidationException extends RestfulException {
     public ValidationException(String message) {
         super(HttpStatus.BAD_REQUEST.value(), message);
     }
+
+    public ValidationException(String message, Object... arguments) {
+        super(HttpStatus.BAD_REQUEST.value(), message, arguments);
+    }
 }

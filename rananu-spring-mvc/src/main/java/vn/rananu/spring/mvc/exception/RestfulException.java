@@ -9,6 +9,10 @@ public abstract class RestfulException extends ClientException {
         super(errorCode, message);
     }
 
+    public RestfulException(Integer errorCode, String message, Object... arguments) {
+        super(errorCode, message, arguments);
+    }
+
     public RestfulException(Integer errorCode, Map<String, String> errors) {
         super(errorCode, errors);
     }

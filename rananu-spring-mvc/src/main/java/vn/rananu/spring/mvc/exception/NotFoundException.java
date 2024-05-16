@@ -8,4 +8,8 @@ public class NotFoundException extends RestfulException {
     public NotFoundException(String message) {
         super(HttpStatus.NOT_FOUND.value(), message);
     }
+
+    public NotFoundException(String message, Object... arguments) {
+        super(HttpStatus.NOT_FOUND.value(), message, arguments);
+    }
 }
