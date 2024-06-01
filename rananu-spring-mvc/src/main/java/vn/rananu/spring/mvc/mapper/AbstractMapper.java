@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +25,8 @@ public abstract class AbstractMapper<Entity> {
 
     public AbstractMapper() {
         ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
-        entityType = (Class) pt.getActualTypeArguments()[0];
+        Type[] arguments = pt.getActualTypeArguments();
+        entityType = (Class) pt.getActualTypeArguments()[arguments.length - 1];
     }
 
     public <DTOResult> DTOResult toDTO(Object source, Class<DTOResult> clazz) {

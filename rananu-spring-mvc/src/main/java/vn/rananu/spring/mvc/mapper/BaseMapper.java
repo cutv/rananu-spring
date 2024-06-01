@@ -13,7 +13,6 @@ public abstract class BaseMapper<DTOResult, Entity> extends AbstractMapper<Entit
     public BaseMapper() {
         ParameterizedType pt = (ParameterizedType) getClass().getGenericSuperclass();
         dtoResultType = (Class) pt.getActualTypeArguments()[0];
-
     }
 
     public DTOResult toDTO(Entity entity) {
