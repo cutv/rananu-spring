@@ -31,8 +31,7 @@ public class JacksonParser {
         mapper = new ObjectMapper();
         mapper.findAndRegisterModules();
         mapper.setDefaultPropertyInclusion(Value.construct(Include.ALWAYS, Include.NON_NULL));
-//        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-//        mapper.setSerializationInclusion(Include.NON_DEFAULT);
+        mapper.setSerializationInclusion(Include.NON_NULL);
     }
 
     public ObjectMapper getMapper() {
