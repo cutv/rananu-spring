@@ -4,10 +4,14 @@ package vn.rananu.spring.shared;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Map;
 
 @Getter
-public class Result<T> {
+public class Result<T> implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 8441050065523394019L;
     private final T data;
     private final Integer errorCode;
     private final String message;
@@ -20,72 +24,64 @@ public class Result<T> {
         this.errors = errors;
     }
 
+    public interface ResultBuilder<T> {
+        ResultBuilder<T> message(String message);
 
-    public interface ResultBuilder {
-        ResultBuilder message(String message);
-
-        <T> Result<T> build();
+        Result<T> build();
     }
 
-    public interface SuccessBuilder extends ResultBuilder {
-        <T> SuccessBuilder data(T data);
+    public interface SuccessBuilder<T> extends ResultBuilder<T> {
+        SuccessBuilder<T> data(T data);
     }
 
-    public interface FailureBuilder extends ResultBuilder {
-        FailureBuilder errorCode(Integer errorCode);
+    public interface FailureBuilder<T> extends ResultBuilder<T> {
+        FailureBuilder<T> errorCode(Integer errorCode);
 
-        FailureBuilder errors(Map<String, String> errors);
+        FailureBuilder<T> errors(Map<String, String> errors);
     }
 
     @Accessors(chain = true)
-    private static class DefaultBuilder implements SuccessBuilder, FailureBuilder {
-        protected Object data;
+    private static class DefaultBuilder<T> implements SuccessBuilder<T>, FailureBuilder<T> {
+        protected T data;
         protected Integer errorCode;
         protected String message;
         protected Map<String, String> errors;
 
         @Override
-        public <T> SuccessBuilder data(T data) {
+        public SuccessBuilder<T> data(T data) {
             this.data = data;
             return this;
         }
 
         @Override
-        public SuccessBuilder message(String message) {
+        public ResultBuilder<T> message(String message) {
             this.message = message;
             return this;
         }
 
         @Override
-        public FailureBuilder errorCode(Integer errorCode) {
+        public FailureBuilder<T> errorCode(Integer errorCode) {
             this.errorCode = errorCode;
             return this;
         }
 
         @Override
-        public FailureBuilder errors(Map<String, String> errors) {
+        public FailureBuilder<T> errors(Map<String, String> errors) {
             this.errors = errors;
             return this;
         }
 
-
         @Override
-        public <T> Result<T> build() {
-            return new Result<>((T) data, errorCode, message, errors);
+        public Result<T> build() {
+            return new Result<>(data, errorCode, message, errors);
         }
     }
 
-    public static SuccessBuilder success() {
-        return new DefaultBuilder();
+    public static <T> SuccessBuilder<T> success() {
+        return new DefaultBuilder<>();
     }
 
-    public static <T> Result<T> success(T data) {
-        return new Result<>(data, null, null, null);
+    public static <T> FailureBuilder<T> fail() {
+        return new DefaultBuilder<>();
     }
-
-    public static FailureBuilder fail() {
-        return new DefaultBuilder();
-    }
-
-
 }

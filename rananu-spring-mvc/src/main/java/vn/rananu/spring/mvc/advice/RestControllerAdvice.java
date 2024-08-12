@@ -28,7 +28,8 @@ public class RestControllerAdvice implements ResponseBodyAdvice<Object> {
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         Result annotation = returnType.getMethodAnnotation(Result.class);
         if (annotation != null) {
-            vn.rananu.spring.shared.Result.SuccessBuilder builder = vn.rananu.spring.shared.Result.success();
+            vn.rananu.spring.shared.Result.SuccessBuilder<Object> builder = vn.rananu.spring.shared.Result
+                    .success().data(body);
             String message = annotation.message();
             if (message != null && !message.isEmpty()) {
                 //            List<Locale.LanguageRange> languageRanges = request.getHeaders().getAcceptLanguage();
@@ -39,9 +40,7 @@ public class RestControllerAdvice implements ResponseBodyAdvice<Object> {
                 message = messageSource.getMessage(message, new Object[0], locale);
                 builder.message(message);
             }
-
-            return builder.data(body)
-                    .build();
+            return builder.build();
         }
         return body;
     }
