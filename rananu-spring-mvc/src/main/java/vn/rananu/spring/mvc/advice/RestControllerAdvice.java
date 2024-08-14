@@ -10,7 +10,10 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import vn.rananu.spring.mvc.annotation.Result;
+import vn.rananu.spring.mvc.parser.JacksonParser;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 @org.springframework.web.bind.annotation.RestControllerAdvice
@@ -40,7 +43,11 @@ public class RestControllerAdvice implements ResponseBodyAdvice<Object> {
                 message = messageSource.getMessage(message, new Object[0], locale);
                 builder.message(message);
             }
-            return builder.build();
+            if (body instanceof String) {
+                response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+                vn.rananu.spring.shared.Result<Object> result = builder.build();
+                return JacksonParser.getInstance().toJson(result);
+            }
         }
         return body;
     }
