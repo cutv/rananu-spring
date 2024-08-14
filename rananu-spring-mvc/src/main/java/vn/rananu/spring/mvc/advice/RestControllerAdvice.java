@@ -30,7 +30,7 @@ public class RestControllerAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         Result annotation = returnType.getMethodAnnotation(Result.class);
-        if (annotation != null) {
+//        if (annotation != null) {
             vn.rananu.spring.shared.Result.SuccessBuilder<Object> builder = vn.rananu.spring.shared.Result
                     .success().data(body);
             String message = annotation.message();
@@ -43,12 +43,13 @@ public class RestControllerAdvice implements ResponseBodyAdvice<Object> {
                 message = messageSource.getMessage(message, new Object[0], locale);
                 builder.message(message);
             }
+            vn.rananu.spring.shared.Result<Object> result = builder.build();
             if (body instanceof String) {
                 response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-                vn.rananu.spring.shared.Result<Object> result = builder.build();
                 return JacksonParser.getInstance().toJson(result);
             }
-        }
-        return body;
+            return result;
+//        }
+//        return body;
     }
 }
