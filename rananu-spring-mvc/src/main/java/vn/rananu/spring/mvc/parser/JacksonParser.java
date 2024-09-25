@@ -71,6 +71,14 @@ public class JacksonParser {
         }
     }
 
+    public byte[] toBytes(Object value) throws JsonParseException {
+        try {
+            return mapper.writeValueAsBytes(value);
+        } catch (Exception e) {
+            throw new JsonParseException("Can not parse object to Json!", e);
+        }
+    }
+
     public <T> T toObject(String jsonString, Class<T> cls) throws JsonParseException {
         try {
             return mapper.readValue(jsonString, cls);

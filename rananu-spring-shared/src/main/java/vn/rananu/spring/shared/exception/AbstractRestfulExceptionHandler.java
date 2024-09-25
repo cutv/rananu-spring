@@ -37,12 +37,12 @@ public abstract class AbstractRestfulExceptionHandler extends ResponseEntityExce
 
     public ResponseEntity<?> handleClientException(ClientException ex, Locale locale) {
         String message = ex.getMessage();
-        if (message != null) message = messageSource.getMessage(message, ex.arguments, locale);
+        if (message != null) message = messageSource.getMessage(message, ex.arguments, message, locale);
         Map<String, String> errors = ex.getErrors();
         if (errors != null)
             errors = errors.entrySet().stream().collect(Collectors.toMap(
                     Map.Entry::getKey, entry ->
-                            messageSource.getMessage(entry.getValue(), new Object[0], locale))
+                            messageSource.getMessage(entry.getValue(), new Object[0], entry.getValue(), locale))
             );
 
         Result<?> result = Result.fail()
