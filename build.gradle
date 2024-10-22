@@ -16,7 +16,7 @@ subprojects { proj ->
     apply plugin: 'java-library'
     apply plugin: 'maven-publish'
     group 'vn.rananu'
-    version = '6.1.13'
+    version = '6.1.14'
     jar.archiveClassifier.convention('')
     bootJar {
         enabled = false
