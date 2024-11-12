@@ -9,13 +9,11 @@ import lombok.experimental.Accessors;
 @Setter
 @Accessors(chain = true)
 public class JSDatatablesFilter {
-
     private Integer draw;
     @JsonProperty("length")
     private Integer pageSize;
     private Integer start;
-
-    private Integer getPageNumber() {
+    public Integer getPageNumber() {
         return start / pageSize;
     }
 }
