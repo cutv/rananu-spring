@@ -8,17 +8,16 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import vn.rananu.spring.mvc.annotation.Result;
 import vn.rananu.spring.mvc.parser.JacksonParser;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
-@org.springframework.web.bind.annotation.RestControllerAdvice
+@RestControllerAdvice
 @RequiredArgsConstructor
-public class RestControllerAdvice implements ResponseBodyAdvice<Object> {
+public class ResultBodyAdvice implements ResponseBodyAdvice<Object> {
     private final MessageSource messageSource;
 
     @Override
@@ -30,26 +29,23 @@ public class RestControllerAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
         Result annotation = returnType.getMethodAnnotation(Result.class);
-//        if (annotation != null) {
-            vn.rananu.spring.shared.Result.SuccessBuilder<Object> builder = vn.rananu.spring.shared.Result
-                    .success().data(body);
-            String message = annotation.message();
-            if (message != null && !message.isEmpty()) {
-                //            List<Locale.LanguageRange> languageRanges = request.getHeaders().getAcceptLanguage();
+        vn.rananu.spring.shared.Result.SuccessBuilder<Object> builder = vn.rananu.spring.shared.Result
+                .success().data(body);
+        String message = annotation.message();
+        if (message != null && !message.isEmpty()) {
+            //            List<Locale.LanguageRange> languageRanges = request.getHeaders().getAcceptLanguage();
 //            languageRanges.isEmpty()
 //                    ? Locale.getDefault()
 //                    : Locale.lookup(languageRanges, LOCALES);
-                Locale locale = LocaleContextHolder.getLocale();
-                message = messageSource.getMessage(message, new Object[0], locale);
-                builder.message(message);
-            }
-            vn.rananu.spring.shared.Result<Object> result = builder.build();
-            if (body instanceof String) {
-                response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
-                return JacksonParser.getInstance().toJson(result);
-            }
-            return result;
-//        }
-//        return body;
+            Locale locale = LocaleContextHolder.getLocale();
+            message = messageSource.getMessage(message, new Object[0], locale);
+            builder.message(message);
+        }
+        vn.rananu.spring.shared.Result<Object> result = builder.build();
+        if (body instanceof String) {
+            response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+            return JacksonParser.getInstance().toJson(result);
+        }
+        return result;
     }
 }

@@ -13,6 +13,12 @@ public class JSDatatablesFilter {
     @JsonProperty("length")
     private Integer pageSize;
     private Integer start;
+
+    public JSDatatablesFilter() {
+        this.pageSize = 10;
+        this.start = 0;
+    }
+
     public Integer getPageNumber() {
         return start / pageSize;
     }
