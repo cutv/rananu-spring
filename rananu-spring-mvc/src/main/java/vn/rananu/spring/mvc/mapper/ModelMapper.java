@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 public class ModelMapper {
     private final static ModelMapper INSTANCE = new ModelMapper();
     protected org.modelmapper.ModelMapper modelMapper;
-
     protected org.modelmapper.ModelMapper modelMapperSkipNullDisabled;
 
     private ModelMapper() {
