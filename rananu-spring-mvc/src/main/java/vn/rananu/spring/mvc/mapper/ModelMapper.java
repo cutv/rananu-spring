@@ -9,22 +9,30 @@ import java.util.stream.Collectors;
 
 
 public class ModelMapper {
-    private final static ModelMapper INSTANCE = new ModelMapper();
-    protected org.modelmapper.ModelMapper modelMapper;
-    protected org.modelmapper.ModelMapper modelMapperSkipNullDisabled;
+    public final static ModelMapper INSTANCE = new ModelMapper();
+    protected org.modelmapper.ModelMapper mapperSkipNullEnabled;
+    protected org.modelmapper.ModelMapper mapperSkipNullDisabled;
 
     private ModelMapper() {
-        modelMapper = new org.modelmapper.ModelMapper();
-        modelMapper.getConfiguration()
+        mapperSkipNullEnabled = new org.modelmapper.ModelMapper();
+        mapperSkipNullEnabled.getConfiguration()
                 .setSkipNullEnabled(true)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
-        modelMapperSkipNullDisabled = new org.modelmapper.ModelMapper();
-        modelMapperSkipNullDisabled.getConfiguration()
+        mapperSkipNullDisabled = new org.modelmapper.ModelMapper();
+        mapperSkipNullDisabled.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);
     }
 
+    public org.modelmapper.ModelMapper getMapperSkipNullEnabled() {
+        return mapperSkipNullEnabled;
+    }
+
+    public org.modelmapper.ModelMapper getMapperSkipNullDisabled() {
+        return mapperSkipNullDisabled;
+    }
+
     public <DTOResult> DTOResult toDTO(Object source, Class<DTOResult> clazz) {
-        return modelMapper.map(source, clazz);
+        return mapperSkipNullEnabled.map(source, clazz);
     }
 
     public <DTOResult> List<DTOResult> toDTOList(Collection<Object> entities, Class<DTOResult> clazz) {
@@ -36,7 +44,7 @@ public class ModelMapper {
     }
 
     public <Entity> Entity toEntity(Object param, Class<Entity> clazz) {
-        return modelMapper.map(param, clazz);
+        return mapperSkipNullEnabled.map(param, clazz);
     }
 
     public void transferFields(Object source, Object destination) {
@@ -45,8 +53,8 @@ public class ModelMapper {
 
     public void transferFields(Object source, Object destination, boolean skipNullEnabled) {
         if (skipNullEnabled)
-            modelMapper.map(source, destination);
+            mapperSkipNullEnabled.map(source, destination);
         else
-            modelMapperSkipNullDisabled.map(source, destination);
+            mapperSkipNullDisabled.map(source, destination);
     }
 }

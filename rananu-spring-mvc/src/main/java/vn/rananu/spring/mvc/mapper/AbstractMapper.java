@@ -1,8 +1,6 @@
 package vn.rananu.spring.mvc.mapper;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -11,16 +9,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static vn.rananu.spring.mvc.configuration.MapperConfiguration.MODEL_MAPPER_SKIP_NULL_DISABLED;
-import static vn.rananu.spring.mvc.configuration.MapperConfiguration.MODEL_MAPPER_SKIP_NULL_ENABLED;
-
 public abstract class AbstractMapper<Entity> {
-    @Autowired
-    @Qualifier(MODEL_MAPPER_SKIP_NULL_ENABLED)
-    protected ModelMapper modelMapper;
-    @Autowired
-    @Qualifier(MODEL_MAPPER_SKIP_NULL_DISABLED)
-    protected ModelMapper modelMapperSkipNullDisabled;
+
+    protected ModelMapper mapperSkipNullEnabled = vn.rananu.spring.mvc.mapper.ModelMapper.INSTANCE.mapperSkipNullEnabled;
+
+    protected ModelMapper mapperSkipNullDisabled = vn.rananu.spring.mvc.mapper.ModelMapper.INSTANCE.mapperSkipNullDisabled;
     protected final Class<Entity> entityType;
 
     public AbstractMapper() {
@@ -30,7 +23,7 @@ public abstract class AbstractMapper<Entity> {
     }
 
     public <DTOResult> DTOResult toDTO(Object source, Class<DTOResult> clazz) {
-        return modelMapper.map(source, clazz);
+        return mapperSkipNullEnabled.map(source, clazz);
     }
 
     public <DTOResult> List<DTOResult> toDTOList(Collection<Entity> entities, Class<DTOResult> clazz) {
@@ -42,7 +35,7 @@ public abstract class AbstractMapper<Entity> {
     }
 
     public Entity toEntity(Object param) {
-        return modelMapper.map(param, entityType);
+        return mapperSkipNullEnabled.map(param, entityType);
     }
 
     public void transferFields(Object source, Object destination) {
@@ -51,8 +44,8 @@ public abstract class AbstractMapper<Entity> {
 
     public void transferFields(Object source, Object destination, boolean skipNullEnabled) {
         if (skipNullEnabled)
-            modelMapper.map(source, destination);
+            mapperSkipNullEnabled.map(source, destination);
         else
-            modelMapperSkipNullDisabled.map(source, destination);
+            mapperSkipNullDisabled.map(source, destination);
     }
 }

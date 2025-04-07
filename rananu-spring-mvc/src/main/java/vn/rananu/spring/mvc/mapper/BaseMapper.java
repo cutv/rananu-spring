@@ -16,7 +16,7 @@ public abstract class BaseMapper<DTOResult, Entity> extends AbstractMapper<Entit
     }
 
     public DTOResult toDTO(Entity entity) {
-        return modelMapper.map(entity, dtoResultType);
+        return mapperSkipNullEnabled.map(entity, dtoResultType);
     }
 
     public List<DTOResult> toDTOList(Collection<Entity> entities) {

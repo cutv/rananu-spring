@@ -4,7 +4,7 @@ plugins {
 dependencies {
     api project(':rananu-spring-shared')
     compileOnly "org.springframework.boot:spring-boot-starter-validation"
-    api 'org.modelmapper:modelmapper:3.2.0'
+    api 'org.modelmapper:modelmapper:3.2.2'
     api 'com.jayway.jsonpath:json-path:2.9.0'
-    api 'io.hypersistence:hypersistence-utils-hibernate-63:3.7.3'
+    api 'io.hypersistence:hypersistence-utils-hibernate-63:3.9.9'
 }
