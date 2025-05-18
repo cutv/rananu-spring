@@ -10,15 +10,13 @@ import java.util.stream.Collectors;
 
 public class ModelMapper {
     public final static ModelMapper INSTANCE = new ModelMapper();
-    protected org.modelmapper.ModelMapper mapperSkipNullEnabled;
-    protected org.modelmapper.ModelMapper mapperSkipNullDisabled;
+    protected org.modelmapper.ModelMapper mapperSkipNullEnabled = new org.modelmapper.ModelMapper();
+    protected org.modelmapper.ModelMapper mapperSkipNullDisabled = new org.modelmapper.ModelMapper();
 
     private ModelMapper() {
-        mapperSkipNullEnabled = new org.modelmapper.ModelMapper();
         mapperSkipNullEnabled.getConfiguration()
                 .setSkipNullEnabled(true)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
-        mapperSkipNullDisabled = new org.modelmapper.ModelMapper();
         mapperSkipNullDisabled.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);
     }
@@ -31,15 +29,15 @@ public class ModelMapper {
         return mapperSkipNullDisabled;
     }
 
-    public <DTOResult> DTOResult toDTO(Object source, Class<DTOResult> clazz) {
+    public <Entity, DTOResult> DTOResult toDTO(Entity source, Class<DTOResult> clazz) {
         return mapperSkipNullEnabled.map(source, clazz);
     }
 
-    public <DTOResult> List<DTOResult> toDTOList(Collection<Object> entities, Class<DTOResult> clazz) {
+    public <Entity, DTOResult> List<DTOResult> toDTOList(Collection<Entity> entities, Class<DTOResult> clazz) {
         return entities.stream().map(entity -> toDTO(entity, clazz)).collect(Collectors.toList());
     }
 
-    public <DTOResult> Set<DTOResult> toDTOSet(Collection<Object> entities, Class<DTOResult> clazz) {
+    public <Entity, DTOResult> Set<DTOResult> toDTOSet(Collection<Entity> entities, Class<DTOResult> clazz) {
         return entities.stream().map(entity -> toDTO(entity, clazz)).collect(Collectors.toSet());
     }
 
